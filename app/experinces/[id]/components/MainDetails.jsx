@@ -1,31 +1,14 @@
-"use client";
 import { getExperienceById } from "@/app/lib/getExperienceById.js";
-import { useEffect } from "react";
+import ClientWrapper from "./ClientWrapper";
 
-const MainDetails = ({ id }) => {
-  useEffect(() => {
-    const fetchDetails = async () => {
-      const experinceDetails = await getExperienceById(id);
-      console.log(experinceDetails);
-    };
+const MainDetails = async ({ id }) => {
+  const data = await getExperienceById(id);
+  const slotsAvaliable = data.slots;
+  const packagePrice = data.price;
 
-    fetchDetails();
-  }, [id]);
-
-  return(
-    <>
-        <div className="mx-auto bg-pink-300 flex ">
-            <div>
-                {/* <Back */}
-            </div>
-
-            <div className="w-full lg:w-[765px] h-[400px]" id="maindiv">
-
-
-            </div>
-        </div>
-    </>
-  )
+  return (
+    <ClientWrapper data={data} slotsAvaliable={slotsAvaliable} packagePrice={packagePrice} />
+  );
 };
 
 export default MainDetails;

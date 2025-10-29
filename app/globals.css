@@ -53,6 +53,27 @@ body {
   .descriptionColor {
     color: #6c6c6c;
   }
+  .notSelected{
+    color: #838383;
+    border-color: #BDBDBD;
+  }
+  .aboutCard{
+    color: #838383;
+    background: #EEEEEE;
+  }
+  .lightText{
+    color: #838383;
+  }
+  .soldOut{
+    background-color: #CCCCCC;
+  }
+  .summaryText{
+    color: #656565;
+  }
+  .summaryNotConfirm{
+    color: #7F7F7F;
+    background-color: #D7D7D7;
+  }
 
   /* CSS copied from https://skeleton-loader.web.app/#css-tab for skeleton */
 

@@ -1,16 +1,16 @@
-import React from 'react'
-import MainDetails from './components/MainDetails'
-import { getExperienceById } from '@/app/lib/getExperienceById'
+import React, { Suspense } from "react";
+import MainDetails from "./components/MainDetails";
+import DetailsLoder from "./components/DetailsLoder";
+const page = async ({ params }) => {
+  const { id } = await params;
 
-const page = async ({params}) => {
-    const {id} = await params
-
-   
   return (
-   <>
-    <MainDetails id= {id}/>
-   </>
-  )
-}
+    <>
+      <Suspense fallback={<DetailsLoder/>}>
+        <MainDetails id={id} />
+      </Suspense>
+    </>
+  );
+};
 
-export default page
+export default page;
