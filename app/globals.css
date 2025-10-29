@@ -3,18 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --cardColor : #F0F0F0;
+  --buttonsColor: #FFD643;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #F9F9F9;
     --foreground: #ededed;
   }
 }
@@ -23,4 +23,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components{
+  .buttonColor {
+    background-color: #FFD643;
+  }
+  .experinceCard{
+    background-color: #F0F0F0;
+  }
+  .badge{
+    background-color: #D6D6D6;
+  }
+  .invalidSlot{
+    background-color: #CCCCCC;
+  }
+  .summaryCard{
+    background-color: #EFEFEF;
+  }
+  .headerBackground{
+    background-color: #F9F9F9;
+  }
+  .searchBackground{
+    background-color: #EDEDED;
+;
+  }
 }
