@@ -1,25 +1,17 @@
-"use client";
-import React from "react";
-import { useFetch } from "../hooks/useFetch.js";
-import Image from "next/image.js";
-const CardsDiv = () => {
-  const { data, loading, error } = useFetch("/experiences");
+import { getExperiences } from "../lib/getExperiences";
+import ExperincesCard from "./ExperincesCard";
 
-  if (loading) return <p className="text-background">Loading...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
+export default async function CardsDiv() {
+  const data = await getExperiences();
+
+  if (!Array.isArray(data) || data.length === 0)
+    return <p className="textColor text-center mt-80">No experiences found!</p>;
 
   return (
-    <div>
-      <ul className="text-black">
-        {data.map((experience) => (
-          <li key={experience.id} className="border-b py-2">
-            {experience.location}
-            <Image src={experience.imageUrl} width={100} height={100} alt="images"/>
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:w-fit lg:grid-cols-4 gap-6 p-6 mx-auto">
+      {data.map((experience) => (
+        <ExperincesCard key={experience.id} experience={experience} />
+      ))}
     </div>
   );
-};
-
-export default CardsDiv;
+}

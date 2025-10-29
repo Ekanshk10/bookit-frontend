@@ -1,12 +1,13 @@
-import Image from "next/image";
-import Header from "./components/Header";
 import CardsDiv from "./components/CardsDiv";
+import { Suspense } from "react";
+import CardLoder from "./components/CardLoder";
 
 export default function Home() {
   return (
-    <div>
-      <Header/>
-      <CardsDiv/>
-    </div>
+    <>
+      <Suspense fallback={<CardLoder/>}>
+        <CardsDiv />
+      </Suspense>
+    </>
   );
 }

@@ -1,17 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
   return (
-    <div className="headerBackground w-full flex flex-col md:flex-row md:justify-between md:items-center px-8 py-4 gap-4 md:gap-0 text-black shadow-[0_2px_16px_0_#0000001A]">
+    <div className="headerBackground w-full flex flex-col md:flex-row md:justify-between md:items-center px-8 py-4 gap-4 md:gap-0 textColor shadow-[0_2px_16px_0_#0000001A]">
       <div className="w-[100px] h-[55px] flex items-center mx-auto md:mx-0">
-        <Image
-          src="/logo.webp"
-          alt="Company Logo"
-          width={100}
-          height={55}
-          priority
-        />
+        <Link    href={`/`}>
+          <Image
+            src="/logo.webp"
+            alt="Company Logo"
+            width={100}
+            height={55}
+            priority
+          />
+        </Link>
       </div>
       <div className="flex w-full md:w-[433px] h-[42px] gap-3 justify-center md:justify-end">
         <input
