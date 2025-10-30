@@ -2,10 +2,19 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "react-toastify";
 
 const page = () => {
   const router = useRouter();
   const id = sessionStorage.getItem("bookingId");
+
+  if (!id) {
+    toast.error("Please Create a booking to access this page");
+    router.push("/");
+    return;
+  }
+    if (!id) return null;
+
   return (
     <div className="mx-auto flex flex-col items-center justify-center w-full gap-7 mt-8">
       <Image
@@ -22,7 +31,10 @@ const page = () => {
       </div>
       <button
         className="w-[138px] h-9 bg-[#E3E3E3] text-[#656565] rounded-sm cursor-pointer"
-        onClick={() => router.push("/")}
+        onClick={() => {
+          router.push("/");
+          sessionStorage.removeItem("bookingId");
+        }}
       >
         Back Home
       </button>
