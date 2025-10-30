@@ -1,12 +1,21 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Header = () => {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = () => {
+    router.push(`/?q=${search}`);
+  };
+  
   return (
     <div className="headerBackground w-full flex flex-col md:flex-row md:justify-between md:items-center px-8 py-4 gap-4 md:gap-0 textColor shadow-[0_2px_16px_0_#0000001A]">
       <div className="w-[100px] h-[55px] flex items-center mx-auto md:mx-0">
-        <Link    href={`/`}>
+        <Link href={`/`}>
           <Image
             src="/logo.webp"
             alt="Company Logo"
@@ -20,9 +29,14 @@ const Header = () => {
         <input
           type="text"
           placeholder="Search experiences"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           className="w-full  md:w-[340px] h-[42px] rounded-sm searchBackground px-4 py-3 font-normal text-sm leading-4.5 focus:placeholder:text-gray-800 outline-none focus:ring-2 focus:ring-blue-300 transition"
         />
-        <button className="buttonColor py-3 px-5 w-[87px] h-[42px] font-medium rounded-lg text-sm leading-4.5 hover:bg-amber-400 ease-in-out duration-300 cursor-pointer">
+        <button
+          className="buttonColor py-3 px-5 w-[87px] h-[42px] font-medium rounded-lg text-sm leading-4.5 hover:bg-amber-400 ease-in-out duration-300 cursor-pointer"
+          onClick={handleSearch}
+        >
           Search
         </button>
       </div>
