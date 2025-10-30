@@ -114,18 +114,23 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
               selectedTime &&
               format(new Date(selectedTime.date), "h:mm a") === timeLabel;
             const isSlotZero = slot.avaliableSlots === 0;
+            const slotTime = new Date(slot.date);
+            const now = new Date();
+            const isPast = slotTime < now;
             return (
               <button
                 key={index}
                 onClick={() => handleTimeSelect(slot)}
-                className={`border rounded-md px-4 py-2 flex justify-between items-center transition gap-1.5 ${
+                className={`border rounded-md px-4 py-2 flex justify-between items-center transition gap-1.5
+                ${
                   isselectedTime
                     ? "buttonColor textColor border-none"
-                    : isSlotZero
-                    ? "soldOut border-none"
-                    : " notSelected hover:bg-gray-100 bg-white"
-                } `}
-                disabled={isSlotZero}
+                    : isSlotZero || isPast
+                    ? "soldOut border-none cursor-not-allowed text-[#838383]"
+                    : "notSelected bg-white hover:bg-gray-100"
+                }
+                `}
+                disabled={isSlotZero || isPast}
               >
                 <span
                   className={`text-sm font-normal ${
@@ -141,7 +146,11 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
                       : "text-[10px] text-[#FF4C0A]"
                   }`}
                 >
-                  {isSlotZero ? "Sold out" : `${slot.avaliableSlots} left`}
+                  {isSlotZero
+                    ? "Sold out"
+                    : isPast
+                    ? ""
+                    : `${slot.avaliableSlots} left`}
                 </span>
               </button>
             );
