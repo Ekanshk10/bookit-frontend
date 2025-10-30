@@ -74,6 +74,10 @@ body {
     color: #7F7F7F;
     background-color: #D7D7D7;
   }
+  .inputTag{
+    background-color: #DDDDDD;
+    color:#727272;
+  }
 
   /* CSS copied from https://skeleton-loader.web.app/#css-tab for skeleton */
 

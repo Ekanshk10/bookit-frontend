@@ -1,12 +1,14 @@
 "use client";
 import { setHours, setMinutes } from "date-fns";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import React, { useState, useMemo, useEffect, Activity } from "react";
 import { toast } from "react-toastify";
 const TAX_RATE = 0.05;
 
-const SummaryCard = ({ packagePrice, id, selectedSlot }) => {
+const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
+    const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isConfirming, setIsConfirming] = useState(false);
   const avaliableSlots = selectedSlot?.time?.avaliableSlots;
@@ -65,16 +67,21 @@ const SummaryCard = ({ packagePrice, id, selectedSlot }) => {
       const isoDateTimeStirng = combinedDateTime.toISOString();
       console.log(isoDateTimeStirng);
 
-      const data = {
+      const bookingData = {
         slot: isoDateTimeStirng,
         quantity,
+        subtotal,
+        taxes,
         total,
         bookingDate: new Date().toISOString(),
-        experinceid: id,
+        experinceId: id,
+        locationName,
       };  
-      toast.success("Slot confirmed successfully!");
+      
+    sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
+    router.push("/booking")
 
-      console.log(data);
+      console.log(bookingData);
     } catch (error) {
       console.log("something is wrong:", error.message);
       toast.error("Something went wrong");

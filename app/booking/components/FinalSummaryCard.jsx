@@ -1,0 +1,149 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { compeleteBooking } from "@/app/lib/completeBooking.js";
+import { toast } from "react-toastify";
+const FinalSummaryCard = ({ bookingData, userData }) => {
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [inputValues, setInputValues] = useState(false);
+  const {
+    packagePrice,
+    quantity,
+    subtotal,
+    taxes,
+    total,
+    locationName,
+    experinceId,
+    slot,
+  } = bookingData;
+  const { name, email, promoDetails, isChecked } = userData;
+
+  console.log("promo: ", promoDetails);
+
+  //   console.log(promoCode)
+
+  const discountedPrice =
+    parseFloat(promoDetails?.data?.finalPrice) + parseFloat(taxes) || total;
+
+  const dateString = format(new Date(slot), "yyyy-MM-dd");
+  const timeString = format(new Date(slot), "hh:mm a");
+
+  useEffect(() => {
+    if (name && email && isChecked) {
+      setInputValues(true);
+    } else {
+      setInputValues(false);
+    }
+  }, [isChecked, name, email]);
+
+  const handleConfirm = async () => {
+    try {
+      const compeleteBookingdata = {
+        name,
+        email,
+        codeId: promoDetails?.data?.codeId,
+        bookingDate: new Date().toISOString(),
+        finalPrice: discountedPrice,
+        exprienceId: experinceId,
+        slotTime: slot,
+      };
+
+      const res = await compeleteBooking(compeleteBookingdata);
+
+      console.log("res:", res.data);
+
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+
+      console.log(compeleteBookingdata);
+    } catch (error) {}
+  };
+  return (
+    <div className=" w-full md:w-[80%] xl:w-[387px] h-[fit] summaryCard rounded-xl p-6 gap-6 flex flex-col">
+      <div className="flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Experience</h3>
+            <h3 className="text-[18px] textColor font-normal">
+              {locationName}
+            </h3>
+          </div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Date</h3>
+            <h3 className="text-[18px] textColor font-normal">{dateString}</h3>
+          </div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Time</h3>
+            <h3 className="text-[18px] textColor font-normal">{timeString}</h3>
+          </div>
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Quantity</h3>
+            <h3 className="text-[18px] textColor font-normal">{quantity}</h3>
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Subtotal</h3>
+            <h3 className="text-[18px] textColor font-normal">₹{subtotal}</h3>
+          </div>
+          {promoDetails && (
+            <div className="flex justify-between items-center">
+              <h3 className="text-[16px] summaryText font-normal">
+                Promo (
+                {promoDetails?.data?.discount &&
+                promoDetails?.data?.discountType === "FLAT"
+                  ? `₹${promoDetails?.data.discountValue}`
+                  : `%${promoDetails?.data.discountValue}`}
+                )
+              </h3>
+              <h3 className="text-[18px] text-green-600 font-normal">
+                ₹{promoDetails?.data?.discount}
+              </h3>
+            </div>
+          )}
+          <div className="flex justify-between items-center">
+            <h3 className="text-[16px] summaryText font-normal">Taxes</h3>
+            <h3 className="text-[18px] textColor font-normal">₹{taxes}</h3>
+          </div>
+        </div>
+
+        {/* Total */}
+        <hr className="h-px bg-[#D9D9D9] border-0 mt-1" />
+        <div className="h-6 flex justify-between pr-2">
+          <h3 className="textColor text-[20px]  font-medium">Total</h3>
+          {/* <h3 className="textColor text-[20px]  font-medium">₹{total}</h3> */}
+
+          {promoDetails ? (
+            <h3 className="textColor text-[20px]  font-medium">
+              ₹{discountedPrice.toFixed(2)}
+            </h3>
+          ) : (
+            <h3 className="textColor text-[20px]  font-medium">₹{total}</h3>
+          )}
+        </div>
+      </div>
+
+      <button
+        onClick={handleConfirm}
+        disabled={!inputValues || isConfirming}
+        className={`${
+          inputValues
+            ? "buttonColor textColor  hover:bg-amber-400 transition-all duration-300 cursor-pointer"
+            : "summaryNotConfirm cursor-not-allowed"
+        } w-full h-11 rounded-lg text-[16px] font-medium`}
+      >
+        {isConfirming ? (
+          <Loader size={20} className="animate-spin mx-auto" />
+        ) : (
+          "Confrim"
+        )}
+      </button>
+    </div>
+  );
+};
+
+export default FinalSummaryCard;
