@@ -63,10 +63,14 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
         // console.log(res.success);
         toast.success("Booking Successful ! Redirecting...");
         sessionStorage.removeItem("bookingData");
-        sessionStorage.setItem("bookingId", JSON.stringify(res?.data?.data?.id));
+        sessionStorage.setItem(
+          "bookingId",
+          JSON.stringify(res?.data?.data?.id)
+        );
         setTimeout(() => {
           router.push("/confrimedBooking");
-        }, 4000);
+          router.refresh();
+        }, 2000);
       } else {
         toast.error(res.message);
       }
