@@ -1,19 +1,25 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const page = () => {
   const router = useRouter();
-  const id = sessionStorage.getItem("bookingId");
 
-  if (!id) {
-    toast.error("Please Create a booking to access this page");
-    router.push("/");
-    return;
-  }
-    if (!id) return null;
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    const bookingId = sessionStorage.getItem("bookingId");
+    if (!bookingId) {
+      toast.error("Please Create a booking to access this page");
+      router.push("/");
+    } else {
+      setId(bookingId);
+    }
+  }, [router]);
+
+  if (!id) return null;
 
   return (
     <div className="mx-auto flex flex-col items-center justify-center w-full gap-7 mt-8">
