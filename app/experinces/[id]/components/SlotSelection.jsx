@@ -33,16 +33,18 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
       );
     });
 
+    console.log("slotsForDate: ", slotsForDate);
+
     const defaultTimeSlot = [7, 9, 11, 13];
 
     const finalTimeSlots = defaultTimeSlot.map((h) => {
       const dateTime = setMinutes(setHours(selectedDateObj, h), 0);
 
-      // finding slot avalible in the data in database for dynamic slot value
       const existingTimeSlot = slotsForDate.find(
-        (slot) => new Date(slot.date).getHours() === h
+        (slot) => new Date(slot.date).getUTCHours() === h
       );
 
+      console.log("existing time slot: ", existingTimeSlot);
       //if no slot found in backend added fallback slot to keep consistencies
       return (
         existingTimeSlot || {
@@ -52,6 +54,8 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
         }
       );
     });
+
+    console.log("Final time slot: ", finalTimeSlots);
 
     setfilteredTimeSlots(finalTimeSlots);
   }, [selectedDate, slots]);
