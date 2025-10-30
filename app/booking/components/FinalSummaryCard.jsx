@@ -68,8 +68,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
           JSON.stringify(res?.data?.data?.id)
         );
         setTimeout(() => {
-          router.push("/confrimedBooking");
-          router.refresh();
+          router.push("/confrimedBooking?ref=updated");
         }, 2000);
       } else {
         toast.error(res.message);
