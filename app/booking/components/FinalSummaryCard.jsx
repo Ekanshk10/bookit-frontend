@@ -52,6 +52,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
         finalPrice: discountedPrice,
         exprienceId: experinceId,
         slotTime: slot,
+        quantity,
       };
 
       const res = await compeleteBooking(compeleteBookingdata);
