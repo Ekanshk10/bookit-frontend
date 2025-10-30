@@ -183,7 +183,7 @@ const UserInfo = ({ bookingData }) => {
         </div>
       </div>
 
-      <FinalSummaryCard bookingData={bookingData} userData={userDate} />
+      <FinalSummaryCard bookingData={bookingData} userData={userDate} error= {error}/>
     </div>
   );
 };

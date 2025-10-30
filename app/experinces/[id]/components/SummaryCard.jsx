@@ -1,5 +1,5 @@
 "use client";
-import { setHours, setMinutes } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const TAX_RATE = 0.05;
 
 const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
-    const router = useRouter();
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isConfirming, setIsConfirming] = useState(false);
   const avaliableSlots = selectedSlot?.time?.avaliableSlots;
@@ -60,11 +60,14 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
       }
       const datePart = new Date(selectedSlot.date);
       const timePart = new Date(selectedSlot.time.date);
+      
       const combinedDateTime = setMinutes(
         setHours(datePart, timePart.getHours()),
         timePart.getMinutes()
       );
-      const isoDateTimeStirng = combinedDateTime.toISOString();
+
+      const isoDateTimeStirng = format(combinedDateTime, "yyyy-MM-dd HH:mm");
+
       console.log(isoDateTimeStirng);
 
       const bookingData = {
@@ -76,10 +79,10 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
         bookingDate: new Date().toISOString(),
         experinceId: id,
         locationName,
-      };  
-      
-    sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
-    router.push("/booking")
+      };
+
+      sessionStorage.setItem("bookingData", JSON.stringify(bookingData));
+      router.push("/booking");
 
       console.log(bookingData);
     } catch (error) {

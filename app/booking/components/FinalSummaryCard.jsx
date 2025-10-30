@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { compeleteBooking } from "@/app/lib/completeBooking.js";
 import { toast } from "react-toastify";
-const FinalSummaryCard = ({ bookingData, userData }) => {
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+const FinalSummaryCard = ({ bookingData, userData, error }) => {
+  const router = useRouter();
+
   const [isConfirming, setIsConfirming] = useState(false);
   const [inputValues, setInputValues] = useState(false);
   const {
@@ -29,15 +33,18 @@ const FinalSummaryCard = ({ bookingData, userData }) => {
   const timeString = format(new Date(slot), "hh:mm a");
 
   useEffect(() => {
-    if (name && email && isChecked) {
+    if (name && email && isChecked && !error.name && !error.email) {
       setInputValues(true);
     } else {
       setInputValues(false);
     }
-  }, [isChecked, name, email]);
+  }, [isChecked, name, email, error.name, error.email]);
 
   const handleConfirm = async () => {
+    setIsConfirming(true);
     try {
+
+      console.log("slot: ", slot);
       const compeleteBookingdata = {
         name,
         email,
@@ -53,13 +60,23 @@ const FinalSummaryCard = ({ bookingData, userData }) => {
       console.log("res:", res.data);
 
       if (res.success) {
-        toast.success(res.message);
+        console.log(res.success);
+        toast.success("Booking Successful ! Redirecting...");
+        sessionStorage.removeItem("bookingData");
+        setTimeout(() => {
+          router.push("/confrimedBooking");
+        }, 5000);
       } else {
         toast.error(res.message);
       }
 
       console.log(compeleteBookingdata);
-    } catch (error) {}
+    } catch (error) {
+      console.log("something is wrong:", error.message);
+      toast.error("Something went wrong");
+    } finally {
+      setIsConfirming(false);
+    }
   };
   return (
     <div className=" w-full md:w-[80%] xl:w-[387px] h-[fit] summaryCard rounded-xl p-6 gap-6 flex flex-col">
