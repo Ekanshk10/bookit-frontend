@@ -85,6 +85,7 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
       router.push("/booking");
 
       console.log(bookingData);
+
     } catch (error) {
       console.log("something is wrong:", error.message);
       toast.error("Something went wrong");

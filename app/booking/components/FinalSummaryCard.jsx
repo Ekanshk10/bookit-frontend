@@ -43,7 +43,6 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
   const handleConfirm = async () => {
     setIsConfirming(true);
     try {
-
       console.log("slot: ", slot);
       const compeleteBookingdata = {
         name,
@@ -60,12 +59,13 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
       console.log("res:", res.data);
 
       if (res.success) {
-        console.log(res.success);
+        // console.log(res.success);
         toast.success("Booking Successful ! Redirecting...");
         sessionStorage.removeItem("bookingData");
+        sessionStorage.setItem("bookingId", JSON.stringify(res?.data?.data?.id));
         setTimeout(() => {
           router.push("/confrimedBooking");
-        }, 5000);
+        }, 4000);
       } else {
         toast.error(res.message);
       }
