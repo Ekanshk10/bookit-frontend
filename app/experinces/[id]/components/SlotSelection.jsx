@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { format, addDays, setHours, setMinutes } from "date-fns";
+const DISPLAY_TIME_LABELS = ["7:00 AM", "9:00 AM", "11:00 AM", "1:00 PM"];
 
 const SlotSelection = ({ slots = [], onSlotSelect }) => {
   const [dates, setDates] = useState([]);
@@ -40,6 +41,15 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
     const finalTimeSlots = defaultTimeSlot.map((h) => {
       const dateTime = setMinutes(setHours(selectedDateObj, h), 0);
 
+      const isoDateString = new Date(
+        selectedDateObj.getFullYear(),
+        selectedDateObj.getMonth(),
+        selectedDateObj.getDate(),
+        h,
+        0,
+        0
+      ).toISOString();
+
       const existingTimeSlot = slotsForDate.find(
         (slot) => new Date(slot.date).getUTCHours() === h
       );
@@ -48,7 +58,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
       //if no slot found in backend added fallback slot to keep consistencies
       return (
         existingTimeSlot || {
-          date: dateTime,
+          date: isoDateString,
           avaliableSlots: 10,
           totalSlots: 10,
         }
@@ -113,7 +123,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
         <h3 className="font-medium text-lg">Choose time</h3>
         <div className="flex gap-3 flex-wrap">
           {filteredTimeSlots.map((slot, index) => {
-            const timeLabel = format(new Date(slot.date), "h:mm a");
+            const timeLabel = DISPLAY_TIME_LABELS[index];
             const isselectedTime =
               selectedTime &&
               format(new Date(selectedTime.date), "h:mm a") === timeLabel;
