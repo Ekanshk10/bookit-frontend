@@ -60,24 +60,10 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
       }
 
       console.log("selectedSlot: ", selectedSlot);
-      const datePart = new Date(selectedSlot.date);
-      const timePart = new Date(selectedSlot.time.date);
-      
-      const combinedDateTime = setMinutes(
-        setHours(datePart, timePart.getHours()),
-        timePart.getMinutes()
-      );
-
-      console.log("combinedSlot: ", combinedDateTime);
-
-
-
-      const isoDateTimeStirng = format(combinedDateTime, "yyyy-MM-dd HH:mm");
-
-      console.log(isoDateTimeStirng);
 
       const bookingData = {
-        slot: isoDateTimeStirng,
+        slotDate: selectedSlot.date, // "2025-11-01"
+        slotTime: selectedSlot.time, // "09:00 AM"
         quantity,
         subtotal,
         taxes,
@@ -91,7 +77,6 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
       router.push("/booking");
 
       console.log(bookingData);
-
     } catch (error) {
       console.log("something is wrong:", error.message);
       toast.error("Something went wrong");

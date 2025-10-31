@@ -3,23 +3,13 @@ import React, { useEffect, useState } from "react";
 import { format, addDays, isSameDay } from "date-fns";
 
 const SLOT_HOURS = [7, 9, 11, 13];
-const DISPLAY_TIME_LABELS = ["7:00 AM", "9:00 AM", "11:00 AM", "1:00 PM"];
+const DISPLAY_TIME_LABELS = ["07:00 AM", "09:00 AM", "11:00 AM", "01:00 PM"];
 
 const SlotSelection = ({ slots = [], onSlotSelect }) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [filteredTimeSlots, setFilteredTimeSlots] = useState([]);
-
-  // function findSlotForDateAndHour(slots, selectedDate, hour) {
-  //   const slotsForSelectedDate = slots.filter((slot) =>
-  //     isSameDay(new Date(slot.date), selectedDate)
-  //   );
-
-  //   return slotsForSelectedDate.find(
-  //     (slot) => new Date(slot.date).getHours() === hour
-  //   ) || null;
-  // }
 
   useEffect(() => {
     const currentDate = new Date();
@@ -33,39 +23,39 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   useEffect(() => {
     if (!selectedDate) return;
 
+    // Filter slots only for selected date
     const slotsForSelectedDate = slots.filter((slot) =>
       isSameDay(new Date(slot.date), selectedDate)
     );
 
-    console.log("slotsforselecteddateL ", slotsForSelectedDate);
+    console.log("slotsselecte: ", slotsForSelectedDate);
+    const finalTimeSlots = SLOT_HOURS.map((hour, idx) => {
+      const timeLabel = DISPLAY_TIME_LABELS[idx];
 
-    const finalTimeSlots = SLOT_HOURS.map((hour) => {
+      const existingSlot = slotsForSelectedDate.find(
+        (slot) => slot.time === timeLabel
+      );
+
       let slotDateTime = new Date(selectedDate);
-
       slotDateTime.setHours(hour, 0, 0, 0);
 
-      const existingSlot = slotsForSelectedDate.find((slot) => {
-        return new Date(slot.date).getHours() === hour;
-      });
-
-      console.log("EXISTING SLOT: ", existingSlot);
-
+      console.log("existingSlot: ", existingSlot);
       return (
         existingSlot || {
           date: slotDateTime.toISOString(),
+          time: timeLabel, // ✅ must attach time string
           avaliableSlots: 10,
           totalSlots: 10,
         }
       );
     });
 
+    console.log("finaltimeslot: ",finalTimeSlots);
+
     setFilteredTimeSlots(finalTimeSlots);
-
-    console.log("finalTimeSlots ", finalTimeSlots);
-
     setSelectedTime(null);
     onSlotSelect?.({ date: selectedDate, time: null });
-  }, [selectedDate, slots, onSlotSelect]);
+  }, [selectedDate, slots]);
 
   const handleDateSelect = (date) => {
     if (!selectedDate || !isSameDay(selectedDate, date)) {
@@ -75,11 +65,11 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
 
   const handleTimeSelect = (slot) => {
     setSelectedTime(slot);
-    const combined = {
-      date: new Date(slot.date),
-      time: slot,
-    };
-    onSlotSelect?.(combined);
+    onSlotSelect?.({
+      date: selectedDate,
+      time: slot.time, 
+      slotDate: slot.date, 
+    });
   };
 
   return (

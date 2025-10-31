@@ -18,7 +18,8 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
     total,
     experienceName,
     experinceId,
-    slot,
+    slotDate,
+    slotTime,
   } = bookingData;
   const { name, email, promoDetails, isChecked } = userData;
 
@@ -29,27 +30,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
   const discountedPrice =
     parseFloat(promoDetails?.data?.finalPrice) + parseFloat(taxes) || total;
 
-  const dateString = format(new Date(slot), "yyyy-MM-dd");
-  function toISTConditional(slot) {
-    const date = new Date(slot);
-
-    // Extract hour in 12hr format
-    const hour = parseInt(format(date, "h"));
-
-    const allowedHours = [7, 9, 11, 1];
-
-    // If time is NOT allowed → add +5h30m
-    if (!allowedHours.includes(hour)) {
-      date.setHours(date.getHours() + 5);
-      date.setMinutes(date.getMinutes() + 30);
-    }
-
-    return format(date, "hh:mm a");
-  }
-
-  // Usage
-  const timeString = toISTConditional(slot);
-
+  const dateString = format(new Date(slotDate), "yyyy-MM-dd");
   useEffect(() => {
     if (name && email && isChecked && !error.name && !error.email) {
       setInputValues(true);
@@ -61,7 +42,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
   const handleConfirm = async () => {
     setIsConfirming(true);
     try {
-      console.log("slot: ", slot);
+      // console.log("slot: ", slot);
       const compeleteBookingdata = {
         name,
         email,
@@ -69,7 +50,8 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
         bookingDate: new Date().toISOString(),
         finalPrice: discountedPrice,
         exprienceId: experinceId,
-        slotTime: slot,
+        slotTime,
+        slotDate: dateString,
         quantity,
       };
 
@@ -116,7 +98,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
           </div>
           <div className="flex justify-between items-center">
             <h3 className="text-[16px] summaryText font-normal">Time</h3>
-            <h3 className="text-[18px] textColor font-normal">{timeString}</h3>
+            <h3 className="text-[18px] textColor font-normal">{slotTime}</h3>
           </div>
           <div className="flex justify-between items-center">
             <h3 className="text-[16px] summaryText font-normal">Quantity</h3>
