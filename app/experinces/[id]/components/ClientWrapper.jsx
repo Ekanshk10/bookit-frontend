@@ -59,7 +59,7 @@ const ClientWrapper = ({ data, slotsAvaliable, packagePrice }) => {
         <SummaryCard
           packagePrice={packagePrice}
           id={data.id}
-          locationName = {data.location}
+          experienceName = {data.experienceName}
           selectedSlot={selectedSlot}
         />
       </div>

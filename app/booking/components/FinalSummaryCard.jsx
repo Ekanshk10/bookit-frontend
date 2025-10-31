@@ -16,7 +16,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
     subtotal,
     taxes,
     total,
-    locationName,
+    experienceName,
     experinceId,
     slot,
   } = bookingData;
@@ -89,7 +89,7 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
           <div className="flex justify-between items-center">
             <h3 className="text-[16px] summaryText font-normal">Experience</h3>
             <h3 className="text-[18px] textColor font-normal">
-              {locationName}
+              {experienceName}
             </h3>
           </div>
           <div className="flex justify-between items-center">

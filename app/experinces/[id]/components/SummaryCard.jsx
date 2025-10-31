@@ -7,7 +7,7 @@ import React, { useState, useMemo, useEffect, Activity } from "react";
 import { toast } from "react-toastify";
 const TAX_RATE = 0.05;
 
-const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
+const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -78,7 +78,7 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, locationName }) => {
         total,
         bookingDate: new Date().toISOString(),
         experinceId: id,
-        locationName,
+        experienceName,
       };
 
       sessionStorage.setItem("bookingData", JSON.stringify(bookingData));

@@ -123,8 +123,8 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
         <h3 className="font-medium text-lg">Choose time</h3>
         <div className="flex gap-3 flex-wrap">
           {filteredTimeSlots.map((slot, index) => {
+            // const timeLabel = format(new Date(slot.date), "h:mm a");
             const timeLabel = DISPLAY_TIME_LABELS[index];
-            
             const isselectedTime =
               selectedTime &&
               format(new Date(selectedTime.date), "h:mm a") === timeLabel;
