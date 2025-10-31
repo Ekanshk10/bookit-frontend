@@ -58,6 +58,8 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
         toast.error("Please select a slot first");
         return;
       }
+
+      console.log("selectedSlot: ", selectedSlot);
       const datePart = new Date(selectedSlot.date);
       const timePart = new Date(selectedSlot.time.date);
       
@@ -69,7 +71,7 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
       console.log("combinedSlot: ", combinedDateTime);
 
 
-      
+
       const isoDateTimeStirng = format(combinedDateTime, "yyyy-MM-dd HH:mm");
 
       console.log(isoDateTimeStirng);
