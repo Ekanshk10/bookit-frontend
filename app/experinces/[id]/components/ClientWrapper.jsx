@@ -33,7 +33,7 @@ const ClientWrapper = ({ data, slotsAvaliable, packagePrice }) => {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <h4 className="text-[24px] font-medium leading-8">
-                {data.location}
+                {data.experienceName} - {data.location}
               </h4>
               <p className="text-[16px] descriptionColor font-normal leading-6">
                 {data.description}
