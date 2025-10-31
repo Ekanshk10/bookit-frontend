@@ -27,11 +27,11 @@ const ExperincesCard = ({ experience }) => {
         <div className="h-[68px] flex gap-3 flex-col">
           <div className="flex justify-between">
             <h4 className="font-medium text-[16px] truncate ">
-              {experience.location}
+              {experience.experienceName}
             </h4>
             <div className="w-[74px] h-6 rounded-sm py-1 px-2 badge text-center">
               <h4 className="font-medium text-[11px] truncate">
-                {experience.state}
+                {experience.location}
               </h4>
             </div>
           </div>
