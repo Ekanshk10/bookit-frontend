@@ -175,7 +175,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
           All times are in IST (GMT +5:30)
         </p>
       </div>
-      {/* {selectedTime && (
+      {selectedTime && (
         <div className="mt-4 text-sm text-gray-700">
           <p>
             <b>Selected Date:</b> {format(selectedDate, "MMM d, yyyy")}
@@ -185,7 +185,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
             {format(new Date(selectedTime.date), "h:mm a")}
           </p>
         </div>
-      )} */}
+      )}
     </div>
   );
 };
