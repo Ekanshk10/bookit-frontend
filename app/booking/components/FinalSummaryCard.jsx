@@ -30,7 +30,25 @@ const FinalSummaryCard = ({ bookingData, userData, error }) => {
     parseFloat(promoDetails?.data?.finalPrice) + parseFloat(taxes) || total;
 
   const dateString = format(new Date(slot), "yyyy-MM-dd");
-  const timeString = format(new Date(slot), "hh:mm a");
+  function toISTConditional(slot) {
+    const date = new Date(slot);
+
+    // Extract hour in 12hr format
+    const hour = parseInt(format(date, "h"));
+
+    const allowedHours = [7, 9, 11, 1];
+
+    // If time is NOT allowed → add +5h30m
+    if (!allowedHours.includes(hour)) {
+      date.setHours(date.getHours() + 5);
+      date.setMinutes(date.getMinutes() + 30);
+    }
+
+    return format(date, "hh:mm a");
+  }
+
+  // Usage
+  const timeString = toISTConditional(slot);
 
   useEffect(() => {
     if (name && email && isChecked && !error.name && !error.email) {
