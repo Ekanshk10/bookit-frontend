@@ -23,7 +23,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   useEffect(() => {
     if (!selectedDate) return;
 
-    // Filter slots only for selected date
+    // flitering slots for the selected date 
     const slotsForSelectedDate = slots.filter((slot) =>
       isSameDay(new Date(slot.date), selectedDate)
     );
@@ -43,7 +43,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
       return (
         existingSlot || {
           date: slotDateTime.toISOString(),
-          time: timeLabel, // ✅ must attach time string
+          time: timeLabel,
           avaliableSlots: 10,
           totalSlots: 10,
         }
@@ -69,6 +69,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
       date: selectedDate,
       time: slot.time, 
       slotDate: slot.date, 
+      avaliableSlots: slot.avaliableSlots, 
     });
   };
 

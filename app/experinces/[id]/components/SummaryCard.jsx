@@ -11,7 +11,8 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isConfirming, setIsConfirming] = useState(false);
-  const avaliableSlots = selectedSlot?.time?.avaliableSlots;
+  const avaliableSlots = selectedSlot?.avaliableSlots;
+  console.log("avaliable: ", avaliableSlots)
 
   useEffect(() => {
     if (avaliableSlots !== undefined && quantity > avaliableSlots) {
