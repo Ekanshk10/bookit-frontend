@@ -139,9 +139,10 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
 
       <button
         onClick={handleConfirm}
-        disabled={!selectedSlot || isConfirming}
+      disabled={!selectedSlot || !selectedSlot.time || !selectedSlot.date || isConfirming}
+
         className={`${
-          selectedSlot
+          selectedSlot?.time
             ? "buttonColor textColor  hover:bg-amber-400 transition-all duration-300 cursor-pointer"
             : "summaryNotConfirm cursor-not-allowed"
         } w-full h-11 rounded-lg text-[16px] font-medium`}
