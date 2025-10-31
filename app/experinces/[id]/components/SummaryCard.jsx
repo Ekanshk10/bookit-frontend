@@ -66,6 +66,10 @@ const SummaryCard = ({ packagePrice, id, selectedSlot, experienceName }) => {
         timePart.getMinutes()
       );
 
+      console.log("combinedSlot: ", combinedDateTime);
+
+
+      
       const isoDateTimeStirng = format(combinedDateTime, "yyyy-MM-dd HH:mm");
 
       console.log(isoDateTimeStirng);
