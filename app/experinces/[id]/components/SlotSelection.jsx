@@ -33,7 +33,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
       slotDateTime.setHours(hour, 0, 0, 0);
 
       const existingSlot = slotsForSelectedDate.find((slot) => {
-        return new Date(slot.date).getHours() === hour;
+        return new Date(slot.date).getUTCHours() === hour;
       });
 
       return (
