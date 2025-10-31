@@ -11,17 +11,15 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [filteredTimeSlots, setFilteredTimeSlots] = useState([]);
 
-  function findSlotForDateAndHour(slots, selectedDate, hour) {
-    const slotsForSelectedDate = slots.filter((slot) =>
-      isSameDay(new Date(slot.date), selectedDate)
-    );
+  // function findSlotForDateAndHour(slots, selectedDate, hour) {
+  //   const slotsForSelectedDate = slots.filter((slot) =>
+  //     isSameDay(new Date(slot.date), selectedDate)
+  //   );
 
-    return (
-      slotsForSelectedDate.find(
-        (slot) => new Date(slot.date).getHours() === hour
-      ) || null
-    );
-  }
+  //   return slotsForSelectedDate.find(
+  //     (slot) => new Date(slot.date).getHours() === hour
+  //   ) || null;
+  // }
 
   useEffect(() => {
     const currentDate = new Date();
@@ -35,16 +33,20 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   useEffect(() => {
     if (!selectedDate) return;
 
-    // const slotsForSelectedDate = slots.filter((slot) =>
-    //   isSameDay(new Date(slot.date), selectedDate)
-    // );
+    const slotsForSelectedDate = slots.filter((slot) =>
+      isSameDay(new Date(slot.date), selectedDate)
+    );
+
+    console.log("slotsforselecteddateL ", slotsForSelectedDate);
 
     const finalTimeSlots = SLOT_HOURS.map((hour) => {
       let slotDateTime = new Date(selectedDate);
 
       slotDateTime.setHours(hour, 0, 0, 0);
 
-      const existingSlot = findSlotForDateAndHour(slots, selectedDate, hour);
+      const existingSlot = slotsForSelectedDate.find((slot) => {
+        return new Date(slot.date).getHours() === hour;
+      });
 
       console.log("EXISTING SLOT: ", existingSlot);
 
@@ -58,6 +60,8 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
     });
 
     setFilteredTimeSlots(finalTimeSlots);
+
+    console.log("finalTimeSlots ", finalTimeSlots);
 
     setSelectedTime(null);
     onSlotSelect?.({ date: selectedDate, time: null });
