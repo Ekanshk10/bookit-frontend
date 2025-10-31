@@ -162,7 +162,7 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
           </p>
           <p>
             <b>Selected Time:</b>{" "}
-            {format(new Date(selectedTime.date), "h:mm a")}
+            {selectedTime.time}
           </p>
         </div>
       )}
