@@ -30,11 +30,13 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
     const finalTimeSlots = SLOT_HOURS.map((hour) => {
       let slotDateTime = new Date(selectedDate);
 
-      slotDateTime.setUTCHours(hour, 0, 0, 0);
+      slotDateTime.setHours(hour, 0, 0, 0);
 
       const existingSlot = slotsForSelectedDate.find((slot) => {
-        return new Date(slot.date).getUTCHours() === hour;
+        return new Date(slot.date).getHours() === hour;
       });
+
+      console.log("EXISTING SLOT: ", existingSlot);
 
       return (
         existingSlot || {
