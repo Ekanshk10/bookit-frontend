@@ -11,6 +11,18 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [filteredTimeSlots, setFilteredTimeSlots] = useState([]);
 
+  function findSlotForDateAndHour(slots, selectedDate, hour) {
+    const slotsForSelectedDate = slots.filter((slot) =>
+      isSameDay(new Date(slot.date), selectedDate)
+    );
+
+    return (
+      slotsForSelectedDate.find(
+        (slot) => new Date(slot.date).getHours() === hour
+      ) || null
+    );
+  }
+
   useEffect(() => {
     const currentDate = new Date();
     const availableDates = Array.from({ length: 5 }, (_, i) =>
@@ -23,18 +35,16 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   useEffect(() => {
     if (!selectedDate) return;
 
-    const slotsForSelectedDate = slots.filter((slot) =>
-      isSameDay(new Date(slot.date), selectedDate)
-    );
+    // const slotsForSelectedDate = slots.filter((slot) =>
+    //   isSameDay(new Date(slot.date), selectedDate)
+    // );
 
     const finalTimeSlots = SLOT_HOURS.map((hour) => {
       let slotDateTime = new Date(selectedDate);
 
       slotDateTime.setHours(hour, 0, 0, 0);
 
-      const existingSlot = slotsForSelectedDate.find((slot) => {
-        return new Date(slot.date).getHours() === hour;
-      });
+      const existingSlot = findSlotForDateAndHour(slots, selectedDate, hour);
 
       console.log("EXISTING SLOT: ", existingSlot);
 
