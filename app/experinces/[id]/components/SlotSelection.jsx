@@ -1,17 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { format, addDays, setHours, setMinutes } from "date-fns";
+import { format, addDays, isSameDay } from "date-fns";
+
+const SLOT_HOURS = [7, 9, 11, 13];
 const DISPLAY_TIME_LABELS = ["7:00 AM", "9:00 AM", "11:00 AM", "1:00 PM"];
 
 const SlotSelection = ({ slots = [], onSlotSelect }) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [filteredTimeSlots, setfilteredTimeSlots] = useState([]);
+  const [filteredTimeSlots, setFilteredTimeSlots] = useState([]);
 
   useEffect(() => {
     const currentDate = new Date();
-
     const availableDates = Array.from({ length: 5 }, (_, i) =>
       addDays(currentDate, i)
     );
@@ -22,69 +23,44 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
   useEffect(() => {
     if (!selectedDate) return;
 
-    const selectedDateObj = new Date(selectedDate);
+    const slotsForSelectedDate = slots.filter((slot) =>
+      isSameDay(new Date(slot.date), selectedDate)
+    );
 
-    // Filter slots that belong to the selected date
-    const slotsForDate = slots.filter((slot) => {
-      const slotDate = new Date(slot.date);
+    const finalTimeSlots = SLOT_HOURS.map((hour) => {
+      let slotDateTime = new Date(selectedDate);
+
+      slotDateTime.setHours(hour, 0, 0, 0);
+
+      const existingSlot = slotsForSelectedDate.find((slot) => {
+        return new Date(slot.date).getHours() === hour;
+      });
+
       return (
-        slotDate.getDate() === selectedDateObj.getDate() &&
-        slotDate.getMonth() === selectedDateObj.getMonth() &&
-        slotDate.getFullYear() === selectedDateObj.getFullYear()
-      );
-    });
-
-    console.log("slotsForDate: ", slotsForDate);
-
-    const defaultTimeSlot = [7, 9, 11, 13];
-
-    const finalTimeSlots = defaultTimeSlot.map((h) => {
-      const dateTime = setMinutes(setHours(selectedDateObj, h), 0);
-
-      const isoDateString = new Date(
-        selectedDateObj.getFullYear(),
-        selectedDateObj.getMonth(),
-        selectedDateObj.getDate(),
-        h,
-        0,
-        0
-      ).toISOString();
-
-      const existingTimeSlot = slotsForDate.find(
-        (slot) => new Date(slot.date).getUTCHours() === h
-      );
-
-      console.log("existing time slot: ", existingTimeSlot);
-      //if no slot found in backend added fallback slot to keep consistencies
-      return (
-        existingTimeSlot || {
-          date: isoDateString,
+        existingSlot || {
+          date: slotDateTime.toISOString(),
           avaliableSlots: 10,
           totalSlots: 10,
         }
       );
     });
 
-    console.log("Final time slot: ", finalTimeSlots);
+    setFilteredTimeSlots(finalTimeSlots);
 
-    setfilteredTimeSlots(finalTimeSlots);
-  }, [selectedDate, slots]);
-
-  //   console.log(dates);
+    setSelectedTime(null);
+    onSlotSelect?.({ date: selectedDate, time: null });
+  }, [selectedDate, slots, onSlotSelect]);
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    const combined = {
-      date,
-      time: selectedTime,
-    };
-    onSlotSelect?.(combined);
+    if (!selectedDate || !isSameDay(selectedDate, date)) {
+      setSelectedDate(date);
+    }
   };
 
   const handleTimeSelect = (slot) => {
     setSelectedTime(slot);
     const combined = {
-      date: selectedDate,
+      date: new Date(slot.date),
       time: slot,
     };
     onSlotSelect?.(combined);
@@ -92,15 +68,12 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
 
   return (
     <div className="rounded-lg flex flex-col gap-6">
-      {/* Date Selection badges */}
       <div>
         <h3 className="font-medium mb-3 text-lg">Choose Date</h3>
         <div className="flex gap-3 flex-wrap">
           {dates.map((date, index) => {
             const formattedDate = format(date, "MMM d");
-            const isSelected =
-              selectedDate &&
-              format(new Date(selectedDate), "MMM d") === formattedDate;
+            const isSelected = selectedDate && isSameDay(selectedDate, date);
 
             return (
               <button
@@ -118,34 +91,35 @@ const SlotSelection = ({ slots = [], onSlotSelect }) => {
           })}
         </div>
       </div>
-      {/* Time selection badges */}
       <div className="flex flex-col gap-3">
         <h3 className="font-medium text-lg">Choose time</h3>
         <div className="flex gap-3 flex-wrap">
           {filteredTimeSlots.map((slot, index) => {
-            // const timeLabel = format(new Date(slot.date), "h:mm a");
             const timeLabel = DISPLAY_TIME_LABELS[index];
+
             const isselectedTime =
-              selectedTime &&
-              format(new Date(selectedTime.date), "h:mm a") === timeLabel;
+              selectedTime && selectedTime.date === slot.date;
+
             const isSlotZero = slot.avaliableSlots === 0;
             const slotTime = new Date(slot.date);
             const now = new Date();
             const isPast = slotTime < now;
+
+            const isDisabled = isSlotZero || isPast;
+            const className = `border rounded-md px-4 py-2 flex justify-between items-center transition gap-1.5 ${
+              isselectedTime
+                ? "buttonColor textColor border-none"
+                : isDisabled
+                ? "soldOut border-none cursor-not-allowed text-[#838383]"
+                : "notSelected bg-white hover:bg-gray-100"
+            }`;
+
             return (
               <button
                 key={index}
                 onClick={() => handleTimeSelect(slot)}
-                className={`border rounded-md px-4 py-2 flex justify-between items-center transition gap-1.5
-                ${
-                  isselectedTime
-                    ? "buttonColor textColor border-none"
-                    : isSlotZero || isPast
-                    ? "soldOut border-none cursor-not-allowed text-[#838383]"
-                    : "notSelected bg-white hover:bg-gray-100"
-                }
-                `}
-                disabled={isSlotZero || isPast}
+                className={className}
+                disabled={isDisabled}
               >
                 <span
                   className={`text-sm font-normal ${
