@@ -48,7 +48,8 @@ const ClientWrapper = ({ data, slotsAvaliable, packagePrice }) => {
               <div className="flex flex-col gap-3">
                 <h3 className="font-medium text-lg">About</h3>
                 <div className="aboutCard text-xs font-normal px-2 py-2 rounded-sm">
-                  {data.description}
+                  {data.about}
+                  {console.log("about> ", data)}
                 </div>
               </div>
             </div>
